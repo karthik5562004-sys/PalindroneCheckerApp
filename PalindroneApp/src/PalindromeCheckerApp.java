@@ -1,83 +1,37 @@
 import java.util.Scanner;
+import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
-     /**
-      * Checks if a given string is a palindrome.
-      * @param input The string to check.
-      * @param ignoreCase Whether to ignore case sensitivity.
-      * @param ignoreSpaces Whether to ignore spaces.
-      * @param ignorePunctuation Whether to ignore punctuation.
-      * @return true if the string is a palindrome under the given conditions.
-      */
-     public static boolean isPalindrome(String input, boolean ignoreCase, boolean ignoreSpaces, boolean ignorePunctuation) {
-          if (input == null) {
-               return false;
-          }
+    public static void main(String[] args) {
 
-          String processed = input;
+        Scanner scanner = new Scanner(System.in);
+        Stack<Character> stack = new Stack<>();
 
-          // Remove spaces if required
-          if (ignoreSpaces) {
-               processed = processed.replaceAll("\\s+", "");
-          }
+        System.out.print("Enter a string: ");
+        String input = scanner.nextLine();
 
-          // Remove punctuation if required
-          if (ignorePunctuation) {
-               processed = processed.replaceAll("[\\p{Punct}]", "");
-          }
+        // Optional: Convert to lowercase and remove spaces
+        String processedInput = input.replaceAll("\\s+", "").toLowerCase();
 
-          // Ignore case if required
-          if (ignoreCase) {
-               processed = processed.toLowerCase();
-          }
+        // Push characters into stack
+        for (int i = 0; i < processedInput.length(); i++) {
+            stack.push(processedInput.charAt(i));
+        }
 
-          // Compare with reverse
-          String reversed = new StringBuilder(processed).reverse().toString();
-          return processed.equals(reversed);
-     }
+        // Pop characters and build reversed string
+        String reversed = "";
+        while (!stack.isEmpty()) {
+            reversed += stack.pop();
+        }
 
-     public static void main(String[] args) {
-          Scanner scanner = new Scanner(System.in);
+        // Check palindrome
+        if (processedInput.equals(reversed)) {
+            System.out.println("The string is a Palindrome.");
+        } else {
+            System.out.println("The string is NOT a Palindrome.");
+        }
 
-          System.out.println("=== Palindrome Checker App ===");
-          System.out.print("Enter a string: ");
-          String input = scanner.nextLine();
-
-          // Get user preferences
-          boolean ignoreCase = getYesNo(scanner, "Ignore case? (y/n): ");
-          boolean ignoreSpaces = getYesNo(scanner, "Ignore spaces? (y/n): ");
-          boolean ignorePunctuation = getYesNo(scanner, "Ignore punctuation? (y/n): ");
-
-          // Check palindrome
-          boolean result = isPalindrome(input, ignoreCase, ignoreSpaces, ignorePunctuation);
-
-          // Output result
-          if (result) {
-               System.out.println("✅ The given string IS a palindrome under the chosen conditions.");
-          } else {
-               System.out.println("❌ The given string is NOT a palindrome under the chosen conditions.");
-          }
-
-          scanner.close();
-     }
-
-     /**
-      * Utility method to get a yes/no response from the user.
-      */
-     private static boolean getYesNo(Scanner scanner, String prompt) {
-          while (true) {
-               System.out.print(prompt);
-               String response = scanner.nextLine().trim().toLowerCase();
-               if (response.equals("y") || response.equals("yes")) {
-                    return true;
-               } else if (response.equals("n") || response.equals("no")) {
-                    return false;
-               } else {
-                    System.out.println("Please enter 'y' or 'n'.");
-               }
-          }
-     }
+        scanner.close();
+    }
 }
-
-
